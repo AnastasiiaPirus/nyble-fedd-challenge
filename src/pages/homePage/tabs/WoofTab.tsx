@@ -1,38 +1,41 @@
 import { useApolloClient } from "@apollo/client";
 import { useToast } from "components/widget/toast/Toast";
 import sendWoofMutation from "graphql/generated/mutations/woofMutation";
-import { LargeText } from "mixins/Font";
-import React from "react"
+import { LargeHeading, MediumHeading } from "mixins/Font";
+import React from "react";
+import { WoofWrapper, WoofButton, WoofButtonWrapper } from "../styles/HomePage";
+import { useTheme } from "styled-components";
 
-export type WoofTabProps = {}
+export type WoofTabProps = {};
 
 export const WoofTab = ({}: WoofTabProps) => {
-  
+  const theme = useTheme();
   const apolloClient = useApolloClient();
   const [openSuccessToast, openErrorToast] = useToast();
-
   const onWoof = () => {
-  /**
-   * Complete with your implementation
-   * 
-  sendWoofMutation(apolloClient, {
-    timestamp: ...
-  }).then((res) => {
-    openSuccessToast("Woofed!");
-    ...
-  }).catch((err) => {
-    openErrorToast("Error during woof");
-    ...
-  })
-  */
-  
-  }
+    sendWoofMutation(apolloClient, {
+      timestamp: new Date().toISOString(),
+    })
+      .then((res) => {
+        openSuccessToast("Woofed!");
+      })
+      .catch((err) => {
+        openErrorToast("Error during woof");
+      });
+  };
 
   return (
     <>
-      <LargeText>
-        Add your implementation
-      </LargeText>
+      <WoofWrapper>
+        <LargeHeading textAlign="center">Woof</LargeHeading>
+        <WoofButtonWrapper>
+          <WoofButton onClick={onWoof}>
+            <MediumHeading color={theme.colours.white}>
+              Click here to woof
+            </MediumHeading>
+          </WoofButton>
+        </WoofButtonWrapper>
+      </WoofWrapper>
     </>
-  )
-}
+  );
+};
